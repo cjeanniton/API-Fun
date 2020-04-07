@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>QUOTES R FUN</title>
+
+<style>
+	body {background-color: #373737; font-family: Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, "sans-serif"}
+	.title {color: #4DA531; text-align: center; text-decoration: underline; font-size: 45px}
+	.instructions {font-size: 30px; color: #FFFFFF}
+	.questions {font-size: 25px; color: #4DA531}
+	.answers {font-size: 20px; color: #FFFFFF}
+	a {color: #FFFFFF}
+	#quote {color: #FFFFFF; font-size: 20px}
+</style>
+	
+<script>
+		function getQuote()
+		{
+			/* Step 1: Make instance of request object...
+			...to make HTTP request after page is loaded*/
+			
+			request = new XMLHttpRequest();
+			console.log("1 - request object created");
+			
+			// Step 2: Set the URL for the AJAX request to be the JSON file
+			
+			request.open("GET", "https://favqs.com/api/qotd", true);
+			
+			console.log("2 - opened request file");
+			
+			// Step 3: set up event handler/callback
+			
+			request.onreadystatechange = function()
+			{
+				console.log("3 - readystatechange event fired.");
+				
+				if (request.readyState == 4 && request.status == 200)
+					{
+						// Step 4: wait for done + success
+						
+						result = request.responseText;
+						quote = JSON.parse(result);
+						
+						document.getElementById("quote").innerHTML = "<br>" + "Author: " + quote["quote"]["author"] + "<br>" + "Quote: " + quote["quote"]["body"]; 
+					}
+				else if (request.readyState == 4 && request.status != 200)
+					{
+						document.getElementById("quote").innerHTML = "Something is wrong!  Check the logs to see where this went off the rails";
+					}
+				else if (request.readyState == 3)
+					{
+						document.getElementById("quote").innerHTML = "Too soon!  Try again";
+					}
+			}
+			// Step 5: fire off the HTTP request
+			
+			request.send();
+			console.log("4 - Request sent");
+		}
+</script>
+</head>
+
+<body>
+	
+	<div class="title">Quotes R Fun</div>
+	
+	<div class="instructions">Press button to generate random quote!</div>
+	<br>
+	
+	<button type="button" id="button" onClick="getQuote()">Generate</button>
+	
+	<div id="quote"></div>
+	
+	<br> 
+	<br>
+	<hr>
+	<div class="questions">
+		About the API: 
+		<div class="answers">I found this API called "FavQs API v2". It provides access to a database of quotes, which can be navigated in a number of ways. One such way allows users to generate random quotes.</div>
+		
+		<br>
+		<br>
+		
+		Where I Found This API:
+		<div class="answers"><a href="https://favqs.com/api">Quote API Link</a></div>
+		
+		<br>
+		<br>
+		
+		Options Used for API Request:
+		<div class="answers">To isolate the critical information from the API response, I accessed the "quote" object so that I could reach values like author and the quote itself.</div>
+		
+		<br>
+		<br>
+		
+		Useful Applications of This API:
+		<div class="answers">
+			This API is perfect for the individual who wants to post their #takemeback pic after a trip to Jamaica, but just can't find that perfect quote to go along with it.
+			<br>
+			<br>
+			If you're super bored during lockdown, press the button a few times, maybe say "wow" for dramatic effect.
+		</div>
+	</div>
+</body>
+</html>
